@@ -4,7 +4,7 @@ const loggedIn = require('../middlewares');
 /* GET private view */
 router.get("/", loggedIn, (req, res, next) => {
   const user = req.session.currentUser;
-  res.render("private", user);
+  res.render("private", { user });
 });
 
 

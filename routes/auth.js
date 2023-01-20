@@ -5,7 +5,8 @@ const User = require('../models/User.model');
 
 /* GET sign up form view */
 router.get("/signup", (req, res, next) => {
-  res.render("auth/signup");
+  const user = req.session.currentUser;
+  res.render("auth/signup", {user});
 });
 
 /* POST sign up form get data to DB */
@@ -29,7 +30,7 @@ router.post("/signup", async (req, res, next) => {
       const salt = await bcrypt.genSalt(saltRounds);
       const passwordHash = await bcrypt.hash(password, salt);
       const user = await User.create({ username, passwordHash });
-      res.render('auth/profile', user);
+      res.render('auth/signupOk', user);
     }
   } catch (error) {
     next(error)
@@ -38,7 +39,8 @@ router.post("/signup", async (req, res, next) => {
 
 /* GET log in form view */
 router.get("/login", (req, res, next) => {
-  res.render("auth/login");
+  const user = req.session.currentUser;
+  res.render("auth/login", {user});
 });
 
 /* POST log in form get data to DB */
@@ -56,8 +58,9 @@ router.post('/login', async (req, res, next) => {
     } else {
       const passwordMatch = await bcrypt.compare(password, ifUserInDB.passwordHash);
       if (passwordMatch) {
-        req.session.currentUser = ifUserInDB;
-        res.render('auth/profile', ifUserInDB);
+        req.session.currentUser = ifUserInDB;//és el mateix que a sota, no?
+        const user = req.session.currentUser;
+        res.render('auth/profile', {ifUserInDB, user});// no cal que els passi els dos, no?
       } else {
         res.render('auth/login', { error: 'Unable to authenticate user :(' });
         return
@@ -70,7 +73,20 @@ router.post('/login', async (req, res, next) => {
 
 /* GET /main view */
 router.get("/login", (req, res, next) => {
-  res.render("auth/login");
+  const user = req.session.currentUser;
+  res.render("auth/login", {user});
+});
+
+/* GET logout */
+router.get('/logout', (req, res, next) => {
+  req.session.destroy((err) => {
+    if (err) {
+      next(err)
+    } else {
+      res.clearCookie('lab-auth-app')
+      res.redirect('/auth/login');
+    }
+  });
 });
 
 
