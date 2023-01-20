@@ -56,6 +56,7 @@ router.post('/login', async (req, res, next) => {
     } else {
       const passwordMatch = await bcrypt.compare(password, ifUserInDB.passwordHash);
       if (passwordMatch) {
+        req.session.currentUser = ifUserInDB;
         res.render('auth/profile', ifUserInDB);
       } else {
         res.render('auth/login', { error: 'Unable to authenticate user :(' });
@@ -65,6 +66,11 @@ router.post('/login', async (req, res, next) => {
   } catch (error) {
     next(error)
   }
+});
+
+/* GET /main view */
+router.get("/login", (req, res, next) => {
+  res.render("auth/login");
 });
 
 
