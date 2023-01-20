@@ -34,7 +34,7 @@ app.use(
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      maxAge: 60000 // 30 days in milliseconds
+      maxAge: 120000 // 2minutes in milliseconds
     },
     store: MongoStore.create({
       mongoUrl: "mongodb://localhost/lab-express-basic-auth"
@@ -46,7 +46,7 @@ app.use(
 const projectName = 'lab-express-basic-auth';
 const capitalized = string => string[0].toUpperCase() + string.slice(1).toLowerCase();
 
-app.locals.title = `${capitalized(projectName)}- Generated with Ironlauncher`;
+app.locals.title = `${capitalized(projectName)}`;
 
 // 👇 Start handling routes here
 const index = require('./routes/index');
