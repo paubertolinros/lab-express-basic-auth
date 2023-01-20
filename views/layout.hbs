@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,17 +7,21 @@
     <title>{{title}}</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
-
   <body>
-    <a href="/">Home</a>
-    <a href="/auth/login">Log in</a>
-    <a href="/auth/signup">Sign up</a>
-    <a href="/main">Funny cat</a>
-    <a href="/private">Private space</a>
-   
+    <nav>
+      {{#if user}}
+        <a href="/">Home</a>
+        <a href="/main">Funny cat</a>
+        <a href="/private">Private Area</a>
+        <a href="/auth/logout">Log Out</a>
+      {{else}}
+        <a href="/">Home</a>
+        <a href="/auth/signup">Sign up</a>
+        <a href="/auth/login">Log in</a>
+        <a href="/main">Funny cat</a>
+      {{/if}}
+    </nav>
     {{{body}}}
-
     <script src="/js/script.js"></script>
   </body>
-
 </html>
